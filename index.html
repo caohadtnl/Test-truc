@@ -24,6 +24,10 @@
   --ok: #15803d;
   --danger: #b91c1c;
   --soft: #fff7ed;
+  --warn-bg: #fffbeb;
+  --warn-border: #f59e0b;
+  --danger-bg: #fef2f2;
+  --danger-border: #dc2626;
 }
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -157,6 +161,20 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .head4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
 .num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:15px!important}
 
+/* Cảnh báo ngưỡng bằng đổi màu */
+input.threshold-warn{
+  border-color: var(--warn-border) !important;
+  background-color: var(--warn-bg) !important;
+  color: #b45309 !important;
+  font-weight: 700;
+}
+input.threshold-danger{
+  border-color: var(--danger-border) !important;
+  background-color: var(--danger-bg) !important;
+  color: #b91c1c !important;
+  font-weight: 800;
+}
+
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 .btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
 .btn.success{background:var(--ok);border-color:var(--ok);color:white}
@@ -166,6 +184,49 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .report{min-height:500px;font-family:inherit;line-height:1.5}
 .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .btn-reset-span{grid-column:1/-1}
+
+/* Giao diện Tab Lịch sử */
+.history-item{
+  border: 1.5px solid #fed7aa;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(234,88,12,0.05);
+}
+.history-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--orange-brand);
+  margin-bottom: 6px;
+}
+.history-desc{
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+.history-actions{
+  display: flex;
+  gap: 8px;
+}
+
+#loginOverlay{
+  position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:9999;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  backdrop-filter:blur(8px);
+}
+.login-box{
+  background:white;width:100%;max-width:360px;border-radius:16px;padding:26px 20px;
+  box-shadow:0 20px 25px -5px rgba(0,0,0,0.4);text-align:center;
+}
+.login-box h2{font-size:18px;margin:0 0 8px;font-weight:800;color:var(--text)}
+.login-box p{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.4}
+.login-box input{margin-bottom:14px;text-align:center;font-size:17px;letter-spacing:0.08em}
+.login-error{color:var(--danger);font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
 
 @media(max-width:640px){
  .app{padding:6px 8px 70px}
@@ -181,6 +242,16 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 </head>
 <body>
 
+<div id="loginOverlay">
+  <div class="login-box">
+    <h2>Xác thực kíp trực</h2>
+    <p>Trạm tuần hoàn, clo - Trạm nước lắng, hồi<br>NMNĐ Quảng Trạch</p>
+    <input type="password" id="appPass" placeholder="Nhập mật khẩu truy cập" autocomplete="current-password">
+    <button class="btn primary" type="button" id="btnLogin" style="width:100%;min-height:46px;font-size:15px">Mở sổ trực ca</button>
+    <div id="loginMsg" class="login-error"></div>
+  </div>
+</div>
+
 <header class="topbar">Báo cáo trực ca Tuần hoàn – Clo</header>
 
 <main class="app" id="app">
@@ -190,6 +261,7 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
     <button class="tab" type="button" data-tab="during">Trong ca</button>
     <button class="tab" type="button" data-tab="handover">Giao ca</button>
     <button class="tab" type="button" data-tab="report">Báo cáo</button>
+    <button class="tab" type="button" data-tab="history">Lịch sử</button>
   </div>
 
   <section data-page="general">
@@ -284,11 +356,55 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
       <div id="status" class="status" aria-live="polite"></div>
     </div>
   </section>
+
+  <section data-page="history" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h2 class="card-title" style="margin:0">Nhật ký các ca trước</h2>
+        <button class="btn danger" type="button" id="clearHistoryBtn" style="min-height:36px;padding:4px 10px;font-size:12.5px">Xóa lịch sử</button>
+      </div>
+      <div id="historyList"></div>
+    </div>
+  </section>
 </main>
 
 <script>
 (() => {
 const app = document.getElementById('app');
+const APP_PASS = "Ndqt1hacn";
+const AUTH_KEY = "qt_shift_auth_state";
+
+const loginOverlay = document.getElementById('loginOverlay');
+const appPass = document.getElementById('appPass');
+const btnLogin = document.getElementById('btnLogin');
+const loginMsg = document.getElementById('loginMsg');
+
+function checkAuth(){
+  if(localStorage.getItem(AUTH_KEY) === "true"){
+    loginOverlay.classList.add("hidden");
+  } else {
+    loginOverlay.classList.remove("hidden");
+    setTimeout(() => appPass.focus(), 200);
+  }
+}
+
+function doLogin(){
+  if((appPass.value || "").trim() === APP_PASS){
+    localStorage.setItem(AUTH_KEY, "true");
+    loginOverlay.classList.add("hidden");
+  } else {
+    loginMsg.textContent = "Mật khẩu không đúng, vui lòng nhập lại.";
+    appPass.value = "";
+    appPass.focus();
+  }
+}
+
+btnLogin.addEventListener("click", doLogin);
+appPass.addEventListener("keydown", (e) => {
+  if(e.key === "Enter") doLogin();
+});
+
+checkAuth();
 
 const roster = {
   A:["Nguyễn Thành Trung","Đào Ngọc Văn"],
@@ -299,8 +415,21 @@ const roster = {
 };
 const U = ["1A","1B","2A","2B"];
 const STORE_KEY = "qt_shift_report_v15";
+const HISTORY_KEY = "qt_shift_history_v1";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
+
+// BẢNG NGƯỠNG CẢNH BÁO THEO ĐÚNG QUY TRÌNH
+const THRESHOLDS = {
+  // Áp suất dầu van CNRV (MPa): 14 - 16 bình thường, cảnh báo ngoài khoảng 14-16, nguy hiểm < 8.5 hoặc > 18
+  hp: { warnMin: 14.0, warnMax: 16.0, dangerMin: 8.5, dangerMax: 18.0 },
+  // Nhiệt độ dầu van CNRV (°C): Cảnh báo > 70°C, Trip > 80°C
+  temp: { warnMax: 70, dangerMax: 80 },
+  // Mức dầu bồn CNRV (Lít): Cảnh báo < 100L, Trip < 75L
+  oil: { warnMin: 100, dangerMin: 75 },
+  // Mức NaOH bồn chứa (mm): Cảnh báo 600 - 2360 mm, Trip < 450 mm hoặc > 2460 mm
+  naoh: { warnMin: 600, warnMax: 2360, dangerMin: 450, dangerMax: 2460 }
+};
 
 const $ = (s, el=app) => el.querySelector(s); const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
@@ -471,9 +600,7 @@ function updatePanelVisibility(p){
     ['[data-f="returnPump"]', '[data-return-pumps]', 'run']
   ].forEach(([sel, target, activeVal]) => {
     const s = $(sel, p);
-    const t = $(target, p);
-    if(s && t) t.classList.toggle("hidden", s.value !== activeVal);
-  });
+    const t = $(target, p);     if(s && t) t.classList.toggle("hidden", s.value !== activeVal);   }); }  // Hàm kiểm tra ngưỡng an toàn cho từng ô nhập function checkThreshold(el){   if(!el \vert{}\vert{} !el.dataset) return;   const f = el.dataset.f;   const cfg = THRESHOLDS[f];   el.classList.remove("threshold-warn", "threshold-danger");   if(!cfg) return;    const raw = normalizeDotDecimal(el.value);   if(!raw \vert{}\vert{} isNaN(raw)) return;   const v = parseFloat(raw);    let isDanger = false;   let isWarn = false;    if((cfg.dangerMin !== undefined && v < cfg.dangerMin) \vert{}\vert{} (cfg.dangerMax !== undefined && v > cfg.dangerMax)){     isDanger = true;   } else if((cfg.warnMin !== undefined && v < cfg.warnMin) \vert{}\vert{} (cfg.warnMax !== undefined && v > cfg.warnMax)){     isWarn = true;   }    if(isDanger){     el.classList.add("threshold-danger");   } else if(isWarn){     el.classList.add("threshold-warn");   } }  function checkAllThresholds(box){   $$('input[data-f]', box).forEach(checkThreshold);
 }
 
 function syncReceiveToHandover(){
@@ -545,7 +672,7 @@ function setupDynamicPhaseEvents(box, isReceive=false){
     });
   });
 
-  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", saveDraft);     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  $$
+  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", () => {       checkThreshold(el);       saveDraft();     });     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       checkThreshold(el);       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  // Xử lý textarea gạch đầu dòng (Vấn đề 1: Đã loại bỏ viết hoa để tránh rối code) $$
 ("textarea[data-bullet]").forEach(tx => {
   tx.addEventListener("focus", () => {
     if(!tx.value.trim()){
@@ -607,13 +734,7 @@ function cleanBulletText(text, compact=false){
   const arr = String(text||"").split(/\n+/).map(x=>x.trim());
   const valid = arr.filter(x => x.replace(/^[-•*]\s*/, "").trim().length > 0);
   const sep = compact ? "\n" : "\n\n";
-  return valid.map(x => {
-    let clean = x.replace(/^[-•*]\s*/, "").trim();
-    if(clean.length > 0){
-      clean = clean.charAt(0).toUpperCase() + clean.slice(1);
-    }
-    return "- " + clean;
-  }).join(sep);
+  return valid.map(x => "- " + x.replace(/^[-•*]\s*/, "").trim()).join(sep);
 }
 
 function vnDate(s){
@@ -840,7 +961,7 @@ $("#copyGroupReport").addEventListener("click",async()=>{
 function switchTab(targetTab){
   $$(".tab").forEach(x=>x.classList.toggle("active", x.dataset.tab === targetTab));   $$
 ("[data-page]").forEach(p=>p.classList.toggle("hidden", p.dataset.page !== targetTab));
-  if(targetTab === "report") $("#reportText").value = buildMailReport();   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  if(targetTab === "report") $("#reportText").value = buildMailReport();   if(targetTab === "history") renderHistory();   window.scrollTo({ top: 0, behavior: "instant" }); }  $$(".tab").forEach(btn=>btn.addEventListener("click",()=>{
   switchTab(btn.dataset.tab);
 }));
 
@@ -869,6 +990,7 @@ function serializePhase(p){
   }
   updateCheckboxVisuals(p);
   updatePanelVisibility(p);
+  checkAllThresholds(p);
 }
 
 function saveDraft(){
@@ -908,16 +1030,111 @@ function loadDraft(){
   }catch(e){return false}
 }
 
+// XỬ LÝ NHẬT KÝ LỊCH SỬ CA TRỰC AN TOÀN
+function getHistory(){
+  try{
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function pushCurrentShiftToHistory(){
+  try{
+    const mailText = buildMailReport();
+    const [shiftName]= $("#shift").value.split("|");
+    const record = {
+      id: Date.now(),
+      date: $("#workDate").value,
+      shift: shiftName,
+      kip: $("#kip").value,
+      staff: $("#staff").value,
+      handover: $("#handoverPeople").value,
+      receive: $("#receivePeople").value,
+      issues: $("#finalIssues").value \vert{}\vert{} $("#issues").value,
+      fullReport: mailText
+    };
+
+    let history = getHistory();
+    history.unshift(record);
+    if(history.length > 20) history = history.slice(0, 20); // Giữ tối đa 20 ca gần nhất
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  }catch(e){}
+}
+
+function renderHistory(){
+  const container = document.getElementById("historyList");
+  if(!container) return;
+  const history = getHistory();
+  if(!history.length){
+    container.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px 10px;font-size:14px">Chưa có nhật ký ca trực nào được lưu.<br>Khi bạn bấm <b>"Bắt đầu ca mới"</b>, ca cũ sẽ tự động lưu vào đây.</div>`;
+    return;
+  }
+
+  container.innerHTML = history.map(item => `
+    <div class="history-item">
+      <div class="history-header">
+        <span>📅 ${vnDate(item.date)} · Ca ${item.shift} (Kíp ${item.kip})</span>
+      </div>
+      <div class="history-desc">
+        <b>Nhân sự:</b> ${item.staff || "Chưa ghi"}<br>
+        <b>Giao:</b> ${item.handover || "-"} ➔ <b>Nhận:</b> ${item.receive || "-"}<br>
+        ${item.issues ? `<b>Bất thường/tồn tại:</b> ${item.issues.replace(/[\n\r]+/g, " | ")}` : `<i>Không có ghi nhận bất thường</i>`}
+      </div>
+      <div class="history-actions">
+        <button class="btn primary" type="button" style="min-height:36px;padding:4px 10px;font-size:12.5px" data-act="view" data-id="${item.id}">Xem báo cáo</button>
+        <button class="btn success" type="button" style="min-height:36px;padding:4px 10px;font-size:12.5px" data-act="copy" data-id="${item.id}">Sao chép</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Bắt sự kiện tập trung trên khung History (chống lỗi hàm)
+const historyList = document.getElementById("historyList");
+if(historyList){
+  historyList.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    const act = btn.dataset.act;
+    const id = Number(btn.dataset.id);
+    const history = getHistory();
+    const item = history.find(x => x.id === id);
+    if(!item) return;
+
+    if(act === "view"){
+      $("#reportText").value = item.fullReport;
+      switchTab("report");
+      $("#status").textContent = `Đang xem lại nhật ký ca ngày ${vnDate(item.date)} - Ca ${item.shift}.`;
+    } else if(act === "copy"){
+      await copyText(item.fullReport, `Đã sao chép báo cáo ca ngày ${vnDate(item.date)} - Ca ${item.shift}.`);
+    }
+  });
+}
+
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+if(clearHistoryBtn){
+  clearHistoryBtn.addEventListener("click", () => {
+    if(confirm("Bạn có chắc chắn muốn xóa toàn bộ danh sách nhật ký các ca trước không?")){
+      localStorage.removeItem(HISTORY_KEY);
+      renderHistory();
+    }
+  });
+}
+
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") saveDraft();
 });
 window.addEventListener("pagehide", saveDraft);
 
 $("#newShift").addEventListener("click",()=>{
-  if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
+  if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?\n(Ca hiện tại sẽ tự động được lưu vào tab Lịch sử)")) return;
   
+  // Tự động lưu ca cũ vào Lịch sử
+  pushCurrentShiftToHistory();
+
   const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;    $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
-  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");   $$
+  $$(".phase input:not([type='checkbox'])").forEach(inp => {     inp.value = "";     inp.classList.remove("threshold-warn", "threshold-danger");   });   $$
 (".phase select").forEach(sel => sel.selectedIndex = 0);
   
   $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");   $$
@@ -944,6 +1161,7 @@ $("#newShift").addEventListener("click",()=>{
   [receivePhase, handoverPhase].forEach(p => {
     updateCheckboxVisuals(p);
     updatePanelVisibility(p);
+    checkAllThresholds(p);
   });
 
   saveDraft();
@@ -960,6 +1178,7 @@ if(!hasDraft){
 [receivePhase, handoverPhase].forEach(p => {
   updateCheckboxVisuals(p);
   updatePanelVisibility(p);
+  checkAllThresholds(p);
 });
 })();
 </script>

@@ -384,7 +384,7 @@ return `
   <div class="metric">
     <label class="field">Mức nước đầu kênh 1A/1B/2A/2B (m)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="level"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="level" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="level"></div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="level"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="level" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="level"></div>
   </div>
 
   <div class="section-label">Lưới chắn rác</div>
@@ -427,22 +427,22 @@ return `
   <div class="metric">
     <label class="field">Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="dis"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="dis" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="dis"></div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="dis"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="dis" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="dis"></div>
   </div>
   <div class="metric">
     <label class="field">Áp suất dầu thủy lực van CNRV 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="hp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="hp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="hp"></div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="hp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="hp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="hp"></div>
   </div>
   <div class="metric">
     <label class="field">Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B (°C)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="temp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="temp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="temp"></div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="temp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="temp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="temp"></div>
   </div>
   <div class="metric">
     <label class="field">Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B (Lít)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="oil" value="190"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="oil" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="oil"></div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="oil" value="190"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="oil" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="oil"></div>
   </div>
   <div class="metric">
     <label class="field">Bơm dầu thủy lực van CNRV 1A/1B/2A/2B</label>
@@ -497,7 +497,7 @@ return `
         </div>
       </div>
     </div>
-    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input class="alarm-clickable" inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="naoh">🟢 BÌNH THƯỜNG</div><div class="alarm-group-detail" data-alarm-group="naoh"></div></div>
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="naoh">🟢 BÌNH THƯỜNG</div><div class="alarm-group-detail" data-alarm-group="naoh"></div></div>
     <div>
       <label class="field">Hệ thống bơm nước hồi</label>
       <select data-f="returnPump"><option value="stop">Ngừng</option><option value="run">Đang chạy</option></select>
@@ -654,9 +654,8 @@ function updateAlarmStatus(box){
   });
 }
 function bindAlarmClicks(box){
-  $$('[data-alarm-status], input[data-f="level"], input[data-f="dis"], input[data-f="hp"], input[data-f="temp"], input[data-f="oil"], input[data-f="naoh"]',box).forEach(el=>el.addEventListener("click",e=>{
-    if(e.target.matches('input')) e.stopPropagation();
-    const type=el.dataset.alarmStatus || el.dataset.f;
+  $$('[data-alarm-status]',box).forEach(st=>st.addEventListener("click",()=>{
+    const type=st.dataset.alarmStatus;
     const detail=$(`[data-alarm-group="${type}"]`,box);
     if(detail) detail.classList.toggle("open");
   }));

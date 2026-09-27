@@ -615,8 +615,8 @@ function alarmGroupHTML(type){
     ],
     hp:[
       ["normal","🟢 Bình thường","14,0–16,0 MPa"],
-      ["warning","🟠 Cảnh báo – thấp","<14,0 MPa → Tự động khởi động bơm dầu phụ"],
-      ["warning","🟠 Cảnh báo – cao",">16,0 MPa → Tự động dừng bơm dầu phụ"],
+      ["warning","🟠 Cảnh báo – thấp","<14,0 MPa → Tự động khởi động bơm dầu"],
+      ["warning","🟠 Cảnh báo – cao",">16,0 MPa → Tự động dừng bơm dầu"],
       ["trip","🔴 Trip hệ thống","<8,5 hoặc >18,0 MPa → Trip hệ thống"]
     ],
     temp:[
@@ -654,11 +654,16 @@ function updateAlarmStatus(box){
   });
 }
 function bindAlarmClicks(box){
-  $$('[data-alarm-status], input[data-f="level"], input[data-f="dis"], input[data-f="hp"], input[data-f="temp"], input[data-f="oil"], input[data-f="naoh"]',box).forEach(el=>el.addEventListener("click",e=>{
-    if(e.target.matches('input')) e.stopPropagation();
-    const type=el.dataset.alarmStatus || el.dataset.f;
+  // Chỉ bấm vào ô trạng thái/cảnh báo mới mở bảng ngưỡng chung.
+  // Ô nhập giá trị không mở chi tiết.
+  $$('[data-alarm-status]',box).forEach(status=>status.addEventListener("click",e=>{
+    e.stopPropagation();
+    const type=status.dataset.alarmStatus;
     const detail=$(`[data-alarm-group="${type}"]`,box);
-    if(detail) detail.classList.toggle("open");
+    if(!detail) return;
+    // Đóng các bảng khác trong cùng phase trước khi mở bảng được chọn.
+    $$('[data-alarm-group]',box).forEach(x=>{ if(x!==detail) x.classList.remove("open"); });
+    detail.classList.toggle("open");
   }));
 }
 

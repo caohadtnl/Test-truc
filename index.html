@@ -24,6 +24,10 @@
   --ok: #15803d;
   --danger: #b91c1c;
   --soft: #fff7ed;
+  --warn-bg: #fffbeb;
+  --warn-border: #f59e0b;
+  --danger-bg: #fef2f2;
+  --danger-border: #dc2626;
 }
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -156,6 +160,20 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .sub-panel{background:var(--soft);padding:11px;border-radius:10px;border:1px dashed #fdba74;margin-top:8px}
 .head4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--muted);margin:0 0 4px}
 .num4 input{text-align:center;padding-left:1px;padding-right:1px;font-size:15px!important}
+
+/* Style cảnh báo đổi màu */
+input.threshold-warn{
+  border-color: var(--warn-border) !important;
+  background-color: var(--warn-bg) !important;
+  color: #b45309 !important;
+  font-weight: 700;
+}
+input.threshold-danger{
+  border-color: var(--danger-border) !important;
+  background-color: var(--danger-bg) !important;
+  color: #b91c1c !important;
+  font-weight: 800;
+}
 
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 .btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
@@ -301,6 +319,20 @@ const U = ["1A","1B","2A","2B"];
 const STORE_KEY = "qt_shift_report_v15";
 const DEFAULT_DURING_TEXT = "- VHV kiểm tra định kỳ thiết bị làm việc bình thường.";
 let finalIssuesManualModified = false;
+
+// BẢNG CẤU HÌNH NGƯỠNG THEO ĐÚNG QUY TRÌNH
+const THRESHOLDS = {
+  // Áp suất dầu van CNRV (MPa): 14 - 16 bình thường, cảnh báo ngoài khoảng 14-16, nguy hiểm < 8.5 hoặc > 18
+  hp: { warnMin: 14.0, warnMax: 16.0, dangerMin: 8.5, dangerMax: 18.0 },
+  // Nhiệt độ dầu van CNRV (°C): Cảnh báo > 70°C, Trip > 80°C
+  temp: { warnMax: 70, dangerMax: 80 },
+  // Mức dầu bồn CNRV (Lít): Cảnh báo < 100L, Trip < 75L
+  oil: { warnMin: 100, dangerMin: 75 },
+  // Mức NaOH bồn chứa (mm): Cảnh báo 600 - 2360 mm, Trip < 450 mm hoặc > 2460 mm
+  naoh: { warnMin: 600, warnMax: 2360, dangerMin: 450, dangerMax: 2460 },
+  // Mức nước đầu kênh (m): <= 8.42m (tương ứng 8420 mm) là Trip CWP -> Báo Đỏ
+  level: { dangerMin: 8.42 }
+};
 
 const $ = (s, el=app) => el.querySelector(s); const $$ = (s, el=app) => [...el.querySelectorAll(s)];
 
@@ -471,9 +503,7 @@ function updatePanelVisibility(p){
     ['[data-f="returnPump"]', '[data-return-pumps]', 'run']
   ].forEach(([sel, target, activeVal]) => {
     const s = $(sel, p);
-    const t = $(target, p);
-    if(s && t) t.classList.toggle("hidden", s.value !== activeVal);
-  });
+    const t = $(target, p);     if(s && t) t.classList.toggle("hidden", s.value !== activeVal);   }); }  // Hàm kiểm tra ngưỡng an toàn cho từng ô nhập function checkThreshold(el){   if(!el \vert{}\vert{} !el.dataset) return;   const f = el.dataset.f;   const cfg = THRESHOLDS[f];   el.classList.remove("threshold-warn", "threshold-danger");   if(!cfg) return;    const raw = normalizeDotDecimal(el.value);   if(!raw \vert{}\vert{} isNaN(raw)) return;   const v = parseFloat(raw);    let isDanger = false;   let isWarn = false;    if((cfg.dangerMin !== undefined && v <= cfg.dangerMin) \vert{}\vert{} (cfg.dangerMax !== undefined && v >= cfg.dangerMax)){     isDanger = true;   } else if((cfg.warnMin !== undefined && v < cfg.warnMin) \vert{}\vert{} (cfg.warnMax !== undefined && v > cfg.warnMax)){     isWarn = true;   }    if(isDanger){     el.classList.add("threshold-danger");   } else if(isWarn){     el.classList.add("threshold-warn");   } }  function checkAllThresholds(box){   $$('input[data-f]', box).forEach(checkThreshold);
 }
 
 function syncReceiveToHandover(){
@@ -545,7 +575,7 @@ function setupDynamicPhaseEvents(box, isReceive=false){
     });
   });
 
-  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", saveDraft);     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  $$
+  $$('input:not([type="checkbox"])', box).forEach(el => {     el.addEventListener("input", () => {       checkThreshold(el);       saveDraft();     });     el.addEventListener("change", () => {       if(el.hasAttribute("data-decimal")){         el.value = normalizeDotDecimal(el.value);       }       checkThreshold(el);       saveDraft();     });   }); }  setupDynamicPhaseEvents(receivePhase, true); setupDynamicPhaseEvents(handoverPhase, false);  // Textarea: tự động xuống dòng và đặt dấu gạch đầu dòng, không can thiệp viết hoa $$
 ("textarea[data-bullet]").forEach(tx => {
   tx.addEventListener("focus", () => {
     if(!tx.value.trim()){
@@ -607,10 +637,7 @@ function cleanBulletText(text, compact=false){
   const arr = String(text||"").split(/\n+/).map(x=>x.trim());
   const valid = arr.filter(x => x.replace(/^[-•*]\s*/, "").trim().length > 0);
   const sep = compact ? "\n" : "\n\n";
-  return valid.map(x => {
-    let clean = x.replace(/^[-•*]\s*/, "").trim();
-    return "- " + clean;
-  }).join(sep);
+  return valid.map(x => "- " + x.replace(/^[-•*]\s*/, "").trim()).join(sep);
 }
 
 function vnDate(s){
@@ -866,6 +893,7 @@ function serializePhase(p){
   }
   updateCheckboxVisuals(p);
   updatePanelVisibility(p);
+  checkAllThresholds(p);
 }
 
 function saveDraft(){
@@ -914,7 +942,7 @@ $("#newShift").addEventListener("click",()=>{
   if(!confirm("Xác nhận bàn giao và khởi tạo ca trực mới?")) return;
 
   const inheritedIssues = $("#finalIssues").value.trim() ? $("#finalIssues").value : $("#issues").value;    $$(".phase input[type='checkbox']").forEach(cb => cb.checked = false);
-  $$(".phase input:not([type='checkbox'])").forEach(inp => inp.value = "");   $$
+  $$(".phase input:not([type='checkbox'])").forEach(inp => {     inp.value = "";     inp.classList.remove("threshold-warn", "threshold-danger");   });   $$
 (".phase select").forEach(sel => sel.selectedIndex = 0);
   
   $$('[data-f="oil"]', receivePhase).forEach(el => el.value = "190");   $$
@@ -941,6 +969,7 @@ $("#newShift").addEventListener("click",()=>{
   [receivePhase, handoverPhase].forEach(p => {
     updateCheckboxVisuals(p);
     updatePanelVisibility(p);
+    checkAllThresholds(p);
   });
 
   saveDraft();
@@ -957,6 +986,7 @@ if(!hasDraft){
 [receivePhase, handoverPhase].forEach(p => {
   updateCheckboxVisuals(p);
   updatePanelVisibility(p);
+  checkAllThresholds(p);
 });
 })();
 </script>

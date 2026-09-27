@@ -161,8 +161,10 @@ textarea{min-height:105px;resize:vertical;line-height:1.45}
 .alarm-normal{color:#166534;background:#dcfce7}
 .alarm-warning{color:#92400e;background:#fef3c7}
 .alarm-trip{color:#991b1b;background:#fee2e2}
-.alarm-detail{display:none;margin-top:4px;padding:6px 7px;border-radius:7px;background:#fff;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:600;line-height:1.35;text-align:left}
-.alarm-status.open + .alarm-detail{display:block}
+.alarm-group-detail{display:none;margin-top:6px;padding:8px 10px;border-radius:9px;background:#fff;border:1px solid #e2e8f0;color:#475569;font-size:11px;font-weight:600;line-height:1.45;text-align:left}
+.alarm-group-detail.open{display:block}
+.alarm-group-detail .alarm-rule{display:block;margin:2px 0}
+.alarm-clickable{cursor:pointer}
 
 .btn{border:1px solid var(--line);background:white;border-radius:10px;min-height:44px;padding:8px 12px;font-weight:700;color:#334155;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 .btn.primary{background:var(--orange-brand);border-color:var(--orange-brand);color:white}
@@ -382,7 +384,7 @@ return `
   <div class="metric">
     <label class="field">Mức nước đầu kênh 1A/1B/2A/2B (m)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="level"><div class="alarm-status alarm-normal" data-alarm-status="level" data-unit="${u}">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="level"></div></div>`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="level"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="level" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="level"></div>
   </div>
 
   <div class="section-label">Lưới chắn rác</div>
@@ -425,22 +427,22 @@ return `
   <div class="metric">
     <label class="field">Áp suất đầu đẩy bơm tuần hoàn 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="dis"><div class="alarm-status alarm-normal" data-alarm-status="dis" data-unit="${u}">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="dis"></div></div>`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="dis"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="dis" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="dis"></div>
   </div>
   <div class="metric">
     <label class="field">Áp suất dầu thủy lực van CNRV 1A/1B/2A/2B (MPa)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="hp"><div class="alarm-status alarm-normal" data-alarm-status="hp" data-unit="${u}">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="hp"></div></div>`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="hp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="hp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="hp"></div>
   </div>
   <div class="metric">
     <label class="field">Nhiệt độ dầu thủy lực van CNRV 1A/1B/2A/2B (°C)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="temp"><div class="alarm-status alarm-normal" data-alarm-status="temp" data-unit="${u}">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="temp"></div></div>`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="temp"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="temp" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="temp"></div>
   </div>
   <div class="metric">
     <label class="field">Mức dầu hệ thống thủy lực van CNRV 1A/1B/2A/2B (Lít)</label>
     <div class="head4">${U.map(u=>`<span>${u}</span>`).join("")}</div>
-    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input inputmode="decimal" data-decimal data-f="oil" value="190"><div class="alarm-status alarm-normal" data-alarm-status="oil" data-unit="${u}">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="oil"></div></div>`).join("")}</div>
+    <div class="grid4 num4">${U.map(u=>`<div class="alarm-cell"><input class="alarm-clickable" inputmode="decimal" data-decimal data-f="oil" value="190"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="oil" data-unit="${u}">🟢 BÌNH THƯỜNG</div></div>`).join("")}</div><div class="alarm-group-detail" data-alarm-group="oil"></div>
   </div>
   <div class="metric">
     <label class="field">Bơm dầu thủy lực van CNRV 1A/1B/2A/2B</label>
@@ -495,7 +497,7 @@ return `
         </div>
       </div>
     </div>
-    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"><div class="alarm-status alarm-normal" data-alarm-status="naoh">🟢 BÌNH THƯỜNG</div><div class="alarm-detail" data-alarm-detail="naoh"></div></div>
+    <div><label class="field">Khối lượng NaOH trong bể chứa (mm)</label><input class="alarm-clickable" inputmode="text" data-f="naoh" placeholder="Mức NaOH (mm)"><div class="alarm-status alarm-normal alarm-clickable" data-alarm-status="naoh">🟢 BÌNH THƯỜNG</div><div class="alarm-group-detail" data-alarm-group="naoh"></div></div>
     <div>
       <label class="field">Hệ thống bơm nước hồi</label>
       <select data-f="returnPump"><option value="stop">Ngừng</option><option value="run">Đang chạy</option></select>
@@ -566,42 +568,76 @@ function alarmNumber(v){
 }
 function alarmResult(type, raw){
   const n=alarmNumber(raw);
-  if(n===null) return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:"Chưa nhập giá trị.",action:""};
-  const fmt=(x,d=1)=>Number(x).toLocaleString("vi-VN",{minimumFractionDigits:d,maximumFractionDigits:d});
+  if(n===null) return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   if(type==="level") {
-    if(n<8.42) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,2)} m\nNgưỡng bảo vệ: <8,42 m`,action:"Ngừng bơm CWP"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,2)} m\nNgưỡng bảo vệ: <8,42 m`,action:""};
+    if(n<8.42) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
   if(type==="dis") {
-    if(n<0.2) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP",detail:`Giá trị: ${fmt(n,2)} MPa\nNgưỡng cảnh báo: <0,20 MPa`,action:"Kiểm tra tình trạng bơm và hệ thống"};
-    if(n>0.3) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO",detail:`Giá trị: ${fmt(n,2)} MPa\nNgưỡng cảnh báo: >0,30 MPa`,action:"Kiểm tra tình trạng bơm và hệ thống"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,2)} MPa\nDải bình thường: 0,20–0,30 MPa`,action:""};
+    if(n<0.2) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>0.3) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
   if(type==="hp") {
-    if(n<8.5) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,1)} MPa\nNgưỡng bảo vệ: <8,5 MPa`,action:"TRIP HỆ THỐNG"};
-    if(n>18) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,1)} MPa\nNgưỡng bảo vệ: >18,0 MPa`,action:"TRIP HỆ THỐNG"};
-    if(n<14) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP",detail:`Giá trị: ${fmt(n,1)} MPa\nNgưỡng cảnh báo: <14,0 MPa`,action:"Tự động khởi động bơm dầu phụ"};
-    if(n>16) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO",detail:`Giá trị: ${fmt(n,1)} MPa\nNgưỡng cảnh báo: >16,0 MPa`,action:"Tự động dừng bơm dầu phụ"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,1)} MPa\nDải bình thường: 14,0–16,0 MPa`,action:""};
+    if(n<8.5 || n>18) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<14) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>16) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
   if(type==="temp") {
-    if(n>80) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,1)} °C\nNgưỡng bảo vệ: >80,0 °C`,action:"TRIP HỆ THỐNG"};
-    if(n>70) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO",detail:`Giá trị: ${fmt(n,1)} °C\nNgưỡng cảnh báo: >70,0 °C`,action:"Kiểm tra nhiệt độ dầu thủy lực"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,1)} °C\nNgưỡng cảnh báo: >70,0 °C`,action:""};
+    if(n>80) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n>70) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
   if(type==="oil") {
-    if(n<75) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,0)} L\nNgưỡng bảo vệ: <75 L`,action:"TRIP HỆ THỐNG"};
-    if(n<100) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP",detail:`Giá trị: ${fmt(n,0)} L\nNgưỡng cảnh báo: <100 L`,action:"Kiểm tra/bổ sung dầu thủy lực"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,0)} L\nNgưỡng cảnh báo: <100 L`,action:""};
+    if(n<75) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<100) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
   if(type==="naoh") {
-    if(n<450) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,0)} mm\nNgưỡng LL: <450 mm`,action:"Dừng bơm nhập và cấp NaOH; dừng bơm tuần hoàn NaOH"};
-    if(n<600) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP",detail:`Giá trị: ${fmt(n,0)} mm\nNgưỡng L: <600 mm`,action:"Theo dõi và xử lý mức NaOH thấp"};
-    if(n>2460) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG",detail:`Giá trị: ${fmt(n,0)} mm\nNgưỡng HH: >2460 mm`,action:"Dừng bơm nhập và cấp NaOH"};
-    if(n>2360) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO",detail:`Giá trị: ${fmt(n,0)} mm\nNgưỡng H: >2360 mm`,action:"Theo dõi và xử lý mức NaOH cao"};
-    return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:`Giá trị: ${fmt(n,0)} mm\nDải bình thường: 600–2360 mm`,action:""};
+    if(n<450 || n>2460) return {kind:"trip",label:"🔴 TRIP HỆ THỐNG"};
+    if(n<600) return {kind:"warning",label:"🟠 CẢNH BÁO – THẤP"};
+    if(n>2360) return {kind:"warning",label:"🟠 CẢNH BÁO – CAO"};
+    return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
   }
-  return {kind:"normal",label:"🟢 BÌNH THƯỜNG",detail:"",action:""};
+  return {kind:"normal",label:"🟢 BÌNH THƯỜNG"};
+}
+function alarmGroupHTML(type){
+  const rows={
+    level:[
+      ["normal","🟢 Bình thường","≥8,42 m"],
+      ["trip","🔴 Trip hệ thống","<8,42 m → Ngừng bơm CWP"]
+    ],
+    dis:[
+      ["normal","🟢 Bình thường","0,20–0,30 MPa"],
+      ["warning","🟠 Cảnh báo – thấp","<0,20 MPa → Kiểm tra tình trạng bơm và hệ thống"],
+      ["warning","🟠 Cảnh báo – cao",">0,30 MPa → Kiểm tra tình trạng bơm và hệ thống"]
+    ],
+    hp:[
+      ["normal","🟢 Bình thường","14,0–16,0 MPa"],
+      ["warning","🟠 Cảnh báo – thấp","<14,0 MPa → Tự động khởi động bơm dầu phụ"],
+      ["warning","🟠 Cảnh báo – cao",">16,0 MPa → Tự động dừng bơm dầu phụ"],
+      ["trip","🔴 Trip hệ thống","<8,5 hoặc >18,0 MPa → Trip hệ thống"]
+    ],
+    temp:[
+      ["normal","🟢 Bình thường","≤70 °C"],
+      ["warning","🟠 Cảnh báo – cao",">70 °C → Kiểm tra nhiệt độ dầu thủy lực"],
+      ["trip","🔴 Trip hệ thống",">80 °C → Trip hệ thống"]
+    ],
+    oil:[
+      ["normal","🟢 Bình thường","≥100 L (mức làm việc khoảng 190 L)"],
+      ["warning","🟠 Cảnh báo – thấp","<100 L → Kiểm tra/bổ sung dầu thủy lực"],
+      ["trip","🔴 Trip hệ thống","<75 L → Trip hệ thống"]
+    ],
+    naoh:[
+      ["normal","🟢 Bình thường","600–2360 mm"],
+      ["warning","🟠 Cảnh báo – thấp","<600 mm → Alarm L"],
+      ["warning","🟠 Cảnh báo – cao",">2360 mm → Alarm H"],
+      ["trip","🔴 Alarm LL","<450 mm → Dừng bơm nhập/cấp NaOH và bơm tuần hoàn NaOH"],
+      ["trip","🔴 Alarm HH",">2460 mm → Dừng bơm nhập và cấp NaOH"]
+    ]
+  };
+  return (rows[type]||[]).map(r=>`<span class="alarm-rule"><strong>${r[1]}</strong>: ${r[2]}</span>`).join("");
 }
 function updateAlarmStatus(box){
   ["level","dis","hp","temp","oil","naoh"].forEach(type=>{
@@ -610,13 +646,20 @@ function updateAlarmStatus(box){
     inputs.forEach((input,i)=>{
       const st=statuses[i] || statuses[0]; if(!st) return;
       const r=alarmResult(type,input.value);
-      st.className=`alarm-status alarm-${r.kind}`; st.textContent=r.label; st.dataset.detailText=r.detail; st.dataset.action=r.action;
-      const d=st.nextElementSibling; if(d && d.classList.contains("alarm-detail")){ d.textContent=r.action ? `${r.detail}\n→ ${r.action}` : r.detail; }
+      st.className=`alarm-status alarm-${r.kind} alarm-clickable`;
+      st.textContent=r.label;
     });
+    const detail=$(`[data-alarm-group="${type}"]`,box);
+    if(detail) detail.innerHTML=alarmGroupHTML(type);
   });
 }
 function bindAlarmClicks(box){
-  $$('[data-alarm-status]',box).forEach(st=>st.addEventListener("click",()=>{st.classList.toggle("open")}));
+  $$('[data-alarm-status], input[data-f="level"], input[data-f="dis"], input[data-f="hp"], input[data-f="temp"], input[data-f="oil"], input[data-f="naoh"]',box).forEach(el=>el.addEventListener("click",e=>{
+    if(e.target.matches('input')) e.stopPropagation();
+    const type=el.dataset.alarmStatus || el.dataset.f;
+    const detail=$(`[data-alarm-group="${type}"]`,box);
+    if(detail) detail.classList.toggle("open");
+  }));
 }
 
 function setupDynamicPhaseEvents(box, isReceive=false){
